@@ -66,6 +66,17 @@ The Blueprint sets the following values:
 | `DATABASE_URL` | Internal connection URL for the Blueprint's PostgreSQL database. |
 | `MEDIA_ROOT=/var/data/media` | Upload location on the persistent Render disk. |
 
+To generate a key locally, run this from the project root:
+
+```sh
+python generate_secret_key.py
+```
+
+Copy the printed value directly into Render's `DJANGO_SECRET_KEY` environment
+variable. Treat it like a password: do not commit it, publish it, or reuse it
+for another project. The Blueprint can also generate and store this value for
+you automatically.
+
 Render supplies `RENDER_EXTERNAL_HOSTNAME` to the web service. For a custom
 domain, add it in the service's **Settings → Custom Domains**, then add these
 environment variables in **Environment** and redeploy:
@@ -118,6 +129,15 @@ production.
 - **Database connection or migration failure**: check that `DATABASE_URL` is
   linked to the Blueprint database and inspect the database and pre-deploy
   logs. Never paste the connection URL into a public issue.
+- **Homepage returns HTTP 500 after deploy**: open the Render service logs and
+  find the Django traceback immediately before the 500 request. Confirm
+  `DATABASE_URL` is linked to the Render PostgreSQL database, then run
+  `python manage.py migrate` from the service Shell to initialize or update
+  its schema. For future deploys, set **Pre-Deploy Command** to
+  `python manage.py migrate`. The `render.yaml` Blueprint already configures
+  this command; a manually created web service must have it entered in its
+  settings. An HTTP `HEAD /` returning 301 is the expected redirect to HTTPS;
+  it is not the cause of a later HTTP 500.
 - **Uploaded images disappear**: confirm the disk is mounted at `/var/data`
   and `MEDIA_ROOT` is `/var/data/media`. Files written outside the disk can be
   lost on redeploy or restart.

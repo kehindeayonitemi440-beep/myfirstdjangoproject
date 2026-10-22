@@ -12,6 +12,9 @@ def env_list(name, default=""):
 
 
 DEBUG = os.environ.get("DJANGO_DEBUG", "1") == "1"
+DATABASE_URL = os.environ.get("DATABASE_URL")
+if not DEBUG and not DATABASE_URL:
+    raise ImproperlyConfigured("Set DATABASE_URL to the Render PostgreSQL connection string.")
 
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "dev-only-insecure-key-change-me")
 if not DEBUG and SECRET_KEY == "dev-only-insecure-key-change-me":
@@ -69,12 +72,12 @@ TEMPLATES = [
 WSGI_APPLICATION = "config.wsgi.application"
 ASGI_APPLICATION = "config.asgi.application"
 
-if os.environ.get("DATABASE_URL"):
+if DATABASE_URL:
     import dj_database_url
 
     DATABASES = {
         "default": dj_database_url.parse(
-            os.environ["DATABASE_URL"],
+            DATABASE_URL,
             conn_max_age=600,
             conn_health_checks=True,
         )
@@ -110,7 +113,11 @@ STORAGES = {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
     },
     "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        "BACKEND": (
+            "whitenoise.storage.CompressedManifestStaticFilesStorage"
+            if not DEBUG
+            else "whitenoise.storage.CompressedStaticFilesStorage"
+        ),
     },
 }
 
