@@ -49,16 +49,10 @@ shop/
 - Fabrics can have an optional photo; otherwise the CSS pattern swatch is used.
 - Layout, light/dark theme and styling are unchanged (`static/shop/css/style.css`).
 
-## Deploying
+## Deploying to Render
 
-Set the variables from `.env.example`, then:
-
-```bash
-python manage.py collectstatic --noinput
-python manage.py migrate
-gunicorn config.wsgi
-```
-
-Static files are served by WhiteNoise. Uploaded photos (`media/`) must be served
-by your web server or object storage in production.
+Use the [Render deployment guide](DEPLOY_RENDER.md). The included `render.yaml`
+configures a Render web service, PostgreSQL, a persistent upload disk, static
+file collection, migrations, and Gunicorn. Local SQLite data and media are not
+automatically transferred to the production resources.
 # myfirstdjangoproject
