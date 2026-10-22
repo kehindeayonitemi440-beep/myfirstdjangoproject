@@ -1,0 +1,19 @@
+{% load humanize %}
+<article class="card" data-cat="{{ fabric.category.slug }}">
+  <div class="sw{% if not fabric.image %} {{ fabric.pattern }}{% endif %}" role="img" aria-label="{{ fabric.name }} {% if fabric.image %}photo{% else %}pattern swatch{% endif %}">
+    {% if fabric.image %}<img src="{{ fabric.image.url }}" alt="" loading="lazy" />{% endif %}
+  </div>
+  <div class="body">
+    <h3>{{ fabric.name }}</h3>
+    <small>{{ fabric.category.name }}{% if fabric.description %} · {{ fabric.description }}{% endif %}</small>
+    <div class="row">
+      {% if fabric.price %}
+        <span class="price">₦{{ fabric.price|floatformat:0|intcomma }}</span>
+      {% else %}
+        <span class="price ask">Ask for price</span>
+      {% endif %}
+      <a class="btn sm" target="_blank" rel="noopener"
+         href="{{ site.whatsapp_url }}?text={{ fabric.order_message|urlencode }}">Order</a>
+    </div>
+  </div>
+</article>

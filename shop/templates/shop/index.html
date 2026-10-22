@@ -1,0 +1,118 @@
+{% extends "shop/base.html" %}
+
+{% block content %}
+<section class="hero">
+  <div class="wrap grid">
+    <div>
+      <h1>{{ site.hero_heading }}</h1>
+      <p>{{ site.hero_text }}</p>
+      <div class="cta">
+        <a class="btn" href="#shop">Browse fabrics</a>
+        <a class="btn alt" href="{{ site.whatsapp_url }}?text=Hello%20Kehinde%2C%20I%27d%20like%20to%20order%20fabric." target="_blank" rel="noopener">Order on WhatsApp</a>
+      </div>
+    </div>
+    <div class="mosaic" aria-hidden="true">
+      <div class="a p1"></div>
+      <div class="p2"></div>
+      <div class="p4"></div>
+      <div class="b p3"></div>
+      <div class="p6"></div>
+    </div>
+  </div>
+</section>
+
+<div class="strip">
+  <div class="wrap">
+    <span>Ankara, lace, aso-oke and adire</span>
+    <span>6-yard bundles and bulk rolls</span>
+    <span>Delivery across Nigeria</span>
+  </div>
+</div>
+
+<section id="shop">
+  <div class="wrap">
+    <h2>The collection</h2>
+    <p class="lead">{{ site.shop_intro }}</p>
+
+    {% if fabrics %}
+      <div class="filters" id="filters" role="group" aria-label="Filter fabrics">
+        <button class="chip" aria-pressed="true" data-f="all">All</button>
+        {% for cat in categories %}
+          <button class="chip" aria-pressed="false" data-f="{{ cat.slug }}">{{ cat.name }}</button>
+        {% endfor %}
+      </div>
+      <div class="cards" id="cards">
+        {% for fabric in fabrics %}
+          {% include "shop/partials/_fabric_card.html" %}
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="empty">New fabrics are on the way. Message us on WhatsApp to see what's in stock.</p>
+    {% endif %}
+  </div>
+</section>
+
+<section id="how" class="alt-bg">
+  <div class="wrap">
+    <h2>How to order</h2>
+    <p class="lead">Four steps, no stress.</p>
+    <ol class="steps">
+      <li><h3>Choose</h3><p>Pick a fabric here or send a photo of what you want.</p></li>
+      <li><h3>Confirm</h3><p>We confirm stock, colour and quantity on WhatsApp.</p></li>
+      <li><h3>Pay</h3><p>Pay by bank transfer. Your order is reserved once payment lands.</p></li>
+      <li><h3>Receive</h3><p>Pickup in Lagos, or delivery to your state in 2 to 5 days.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section id="about" class="about">
+  <div class="wrap grid">
+    {% if site.portrait %}
+      <div class="portrait" role="img" aria-label="Portrait of {{ site.brand_name }}">
+        <img src="{{ site.portrait.url }}" alt="" loading="lazy" />
+      </div>
+    {% else %}
+      <div class="portrait p1" role="img" aria-label="Placeholder for {{ site.brand_name }}'s portrait">{{ site.initials }}</div>
+    {% endif %}
+    <div>
+      <h2>{{ site.about_heading }}</h2>
+      {{ site.about_text|linebreaks }}
+      {% if facts %}
+        <div class="facts">
+          {% for fact in facts %}
+            <div><b>{{ fact.value }}</b><span>{{ fact.label }}</span></div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% if testimonials %}
+<section class="alt-bg">
+  <div class="wrap">
+    <h2>Kind words</h2>
+    <div class="quotes">
+      {% for t in testimonials %}
+        <blockquote>
+          {{ t.quote }}
+          {% if t.author %}<footer>{{ t.author }}</footer>{% endif %}
+        </blockquote>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<section id="contact" class="contact">
+  <div class="wrap">
+    <h2>Ready to order?</h2>
+    <p class="lead">{{ site.contact_text }}</p>
+    <div class="cta">
+      <a class="btn" href="{{ site.whatsapp_url }}?text=Hello%20Kehinde%2C%20I%27d%20like%20to%20order%20fabric." target="_blank" rel="noopener">Chat on WhatsApp</a>
+      <a class="btn alt" href="mailto:{{ site.email }}">Send an email</a>
+      <a class="btn alt" href="{{ site.instagram_url }}" target="_blank" rel="noopener">Instagram</a>
+    </div>
+  </div>
+</section>
+{% endblock %}
