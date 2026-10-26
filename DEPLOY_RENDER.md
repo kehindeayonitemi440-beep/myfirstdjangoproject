@@ -33,7 +33,7 @@ and starts Gunicorn.
    runs `collectstatic`; the pre-deploy step applies migrations; Gunicorn then
    serves the app. Open the `onrender.com` URL shown on the service page.
 
-The service reads the Render-provided `DATABASE_URL`. `RENDER_EXTERNAL_HOSTNAME`
+The service reads the Render-provided `DATABASE_gURL`. `RENDER_EXTERNAL_HOSTNAME`
 is automatically added to Django's allowed hosts and CSRF trusted origins.
 HTTPS redirects and secure session/CSRF cookies are enabled in production.
 WhiteNoise serves versioned, compressed static files. Uploaded images are
